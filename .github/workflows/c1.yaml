@@ -1,0 +1,53 @@
+name: Conditional Workflow Example
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'frontend/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests
+        id: run-tests
+        run: npm test
+
+      - name: Success Action
+        if: success() # This will run only if the 'Run tests' step succeeds
+        run: echo "Tests passed successfully!"
+
+      - name: Failure Action
+        if: failure() # This will run only if the 'Run tests' step fails
+        run: echo "Tests failed. Please check the logs."
+
+      - name: Always Run
+        if: always() # This will run regardless of the result of the 'Run tests' step
+        run: echo "This step runs no matter what happened before."
+
+      - name: Post-Test Cleanup
+        if: steps.run-tests.outcome == 'success'
+        run: echo "Tests completed. Performing post-test cleanup."
+
+      - name: Send Failure Notification
+        if: steps.run-tests.outcome == 'failure'
+        run: echo "Sending notification about test failure."
+
+      - name: Final Always Run Step
+        if: always()
+        run: echo "This final step always runs, useful for cleanup actions."
+

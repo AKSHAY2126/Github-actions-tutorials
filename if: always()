@@ -5,9 +5,8 @@ Execution Guarantee: The always() function makes sure that a step or job will ru
 Usage
 You can use always() in both jobs and steps within your GitHub Actions workflow. Here's how you might set it up:
 
+
 At the Job Level
-yaml
-Copy code
 jobs:
   example_job:
     runs-on: ubuntu-latest
@@ -25,8 +24,11 @@ jobs:
     steps:
       - name: Cleanup resources
         run: echo "Cleaning up resources"
+
+
+ 
 At the Step Level
-yaml
+
 Copy code
 jobs:
   build:
